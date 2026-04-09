@@ -1,5 +1,5 @@
 import 'package:conversion_calculator/core/router/router.dart';
-import 'package:conversion_calculator/core/theame/theame.dart';
+import 'package:conversion_calculator/core/theme/theame.dart';
 import 'package:flutter/material.dart';
 
 void main() {
