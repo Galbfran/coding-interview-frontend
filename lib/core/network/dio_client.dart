@@ -43,7 +43,6 @@ class DioClient {
   }
 }
 
-/// Registra request, response y errores de red / HTTP.
 class _RequestResponseLogInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
