@@ -3,10 +3,9 @@ import 'package:conversion_calculator/core/network/api_failure.dart';
 import 'package:conversion_calculator/core/network/result.dart';
 import 'package:conversion_calculator/data/model/request/calculator_dto.dart';
 import 'package:conversion_calculator/data/repositories/conversion_repository.dart';
-import 'package:conversion_calculator/presentation/cubits/calculator/calculator_cubit.dart';
+import 'package:equatable/equatable.dart';
 
-
-
+part 'calculator_state.dart';
 
 class CalculatorCubit extends Cubit<CalculatorState> {
   CalculatorCubit({required this.repository}) : super(const CalculatorInitial());

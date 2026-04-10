@@ -16,4 +16,20 @@ class CalculatorDto {
     required this.amount,
     required this.amountCurrencyId,
   });
+
+  Map<String, dynamic> toQueryParameters() => {
+        'type': changeType.asApiType,
+        'cryptoCurrencyId': cryptoCurrencyId.asApiId,
+        'fiatCurrencyId': fiatCurrencyId.asApiId,
+        'amount': amount,
+        'amountCurrencyId': amountCurrencyId,
+      };
+
+      factory CalculatorDto.mock() => CalculatorDto(
+        changeType: ChangeType.cryptoToFiat,
+        cryptoCurrencyId: CryptoCurrencyId.tatumTronUsdt,
+        fiatCurrencyId: FiatCurrencyId.pen,
+        amount: 100,
+        amountCurrencyId: 100,
+      );
 }
