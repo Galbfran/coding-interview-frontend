@@ -48,7 +48,15 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/el_dorado_icono.png
+  adaptive_icon_background: "#FFDD00"
+  adaptive_icon_foreground: assets/el_dorado_icono.png
+  adaptive_icon_foreground_inset: 0
 
 flutter:
 
