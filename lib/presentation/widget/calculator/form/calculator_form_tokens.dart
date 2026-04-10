@@ -12,10 +12,17 @@ abstract final class CalculatorFormTokens {
 
   static const double selectorBorderWidth = 2;
 
-  static const EdgeInsets amountContentPadding = EdgeInsets.symmetric(
-    horizontal: 16,
-    vertical: 14,
+  /// Padding del monto; vertical equilibrado para centrar mejor el texto en el campo.
+  static const EdgeInsets amountContentPadding = EdgeInsets.fromLTRB(
+    16,
+    15,
+    16,
+    15,
   );
+
+  static const double exchangeButtonLabelFontSize = 17;
+
+  static const double exchangeButtonElevation = 3.5;
 
   static const EdgeInsets selectorPillPadding = EdgeInsets.symmetric(
     horizontal: 6,

@@ -58,8 +58,9 @@ class _CalculatorCardState extends State<CalculatorCard> {
     const amountCurrencyId = 100.0;
 
     return CalculatorDto(
-      changeType:
-          tengoCrypto ? ChangeType.cryptoToFiat : ChangeType.fiatToCrypto,
+      changeType: tengoCrypto
+          ? ChangeType.cryptoToFiat
+          : ChangeType.fiatToCrypto,
       cryptoCurrencyId: crypto,
       fiatCurrencyId: fiat,
       amount: amount,
@@ -88,9 +89,9 @@ class _CalculatorCardState extends State<CalculatorCard> {
   void _onCambiar(BuildContext context) {
     final dto = buildDto();
     if (dto == null) {
-      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-        const SnackBar(content: Text('Ingresá un monto válido')),
-      );
+      ScaffoldMessenger.maybeOf(
+        context,
+      )?.showSnackBar(const SnackBar(content: Text('Ingresá un monto válido')));
       return;
     }
     context.read<CalculatorCubit>().calculate(dto: dto);
@@ -110,7 +111,7 @@ class _CalculatorCardState extends State<CalculatorCard> {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.surface,
-      elevation: 10,
+      elevation: 12,
       shadowColor: AppColors.shadow,
       borderRadius: BorderRadius.circular(24),
       clipBehavior: Clip.antiAlias,
@@ -152,8 +153,7 @@ class _CalculatorCardState extends State<CalculatorCard> {
                 _buildSummary(context, state),
                 const SizedBox(height: 20),
                 CalculatorExchangeButton(
-                  onPressed:
-                      loading ? null : () => _onCambiar(context),
+                  onPressed: loading ? null : () => _onCambiar(context),
                 ),
               ],
             );
@@ -193,7 +193,7 @@ class _CalculatorCardState extends State<CalculatorCard> {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       height: 1.25,
                       color: errorColor.withValues(alpha: 0.85),
                     ),
@@ -211,64 +211,60 @@ class _CalculatorCardState extends State<CalculatorCard> {
   ) {
     return switch (state) {
       CalculatorInitial() => const [
-          CalculatorSummaryRow(title: 'Tasa estimada', value: '—'),
-          CalculatorSummaryRow(title: 'Recibirás', value: '—'),
-          CalculatorSummaryRow(title: 'Tiempo estimado', value: '—'),
-        ],
+        CalculatorSummaryRow(title: 'Tasa estimada', value: '—'),
+        CalculatorSummaryRow(title: 'Recibirás', value: '—'),
+        CalculatorSummaryRow(title: 'Tiempo estimado', value: '—'),
+      ],
       CalculatorLoading() => const [
-          CalculatorSummaryRow(
-            title: 'Tasa estimada',
-            value: 'Cargando…',
-            valueColor: AppColors.labelGrey,
-            valueFontStyle: FontStyle.italic,
-          ),
-          CalculatorSummaryRow(
-            title: 'Recibirás',
-            value: 'Cargando…',
-            valueColor: AppColors.labelGrey,
-            valueFontStyle: FontStyle.italic,
-          ),
-          CalculatorSummaryRow(
-            title: 'Tiempo estimado',
-            value: 'Cargando…',
-            valueColor: AppColors.labelGrey,
-            valueFontStyle: FontStyle.italic,
-          ),
-        ],
+        CalculatorSummaryRow(
+          title: 'Tasa estimada',
+          value: 'Cargando…',
+          valueColor: AppColors.labelGrey,
+          valueFontStyle: FontStyle.italic,
+        ),
+        CalculatorSummaryRow(
+          title: 'Recibirás',
+          value: 'Cargando…',
+          valueColor: AppColors.labelGrey,
+          valueFontStyle: FontStyle.italic,
+        ),
+        CalculatorSummaryRow(
+          title: 'Tiempo estimado',
+          value: 'Cargando…',
+          valueColor: AppColors.labelGrey,
+          valueFontStyle: FontStyle.italic,
+        ),
+      ],
       CalculatorLoaded(:final rate, :final convertedAmount) => [
-          CalculatorSummaryRow(
-            title: 'Tasa estimada',
-            value:
-                '\u2248 ${_formatAmountEsAr(rate)} ${_rateCurrencySuffix()}',
-          ),
-          CalculatorSummaryRow(
-            title: 'Recibirás',
-            value:
-                '\u2248 ${_formatAmountEsAr(convertedAmount)} ${_receiveCurrencySuffix()}',
-          ),
-          const CalculatorSummaryRow(
-            title: 'Tiempo estimado',
-            value: '\u2248 10 Min',
-          ),
-        ],
+        CalculatorSummaryRow(
+          title: 'Tasa estimada',
+          value: '\u2248 ${_formatAmountEsAr(rate)} ${_rateCurrencySuffix()}',
+        ),
+        CalculatorSummaryRow(
+          title: 'Recibirás',
+          value:
+              '\u2248 ${_formatAmountEsAr(convertedAmount)} ${_receiveCurrencySuffix()}',
+        ),
+        const CalculatorSummaryRow(
+          title: 'Tiempo estimado',
+          value: '\u2248 10 Min',
+        ),
+      ],
       CalculatorError() => [
-          CalculatorSummaryRow(
-            title: 'Tasa estimada',
-            value: _noConversionValue,
-            valueColor: errorColor,
-            valueMaxLines: 1,
-          ),
-          CalculatorSummaryRow(
-            title: 'Recibirás',
-            value: _noConversionValue,
-            valueColor: errorColor,
-            valueMaxLines: 1,
-          ),
-          const CalculatorSummaryRow(
-            title: 'Tiempo estimado',
-            value: '—',
-          ),
-        ],
+        CalculatorSummaryRow(
+          title: 'Tasa estimada',
+          value: _noConversionValue,
+          valueColor: errorColor,
+          valueMaxLines: 1,
+        ),
+        CalculatorSummaryRow(
+          title: 'Recibirás',
+          value: _noConversionValue,
+          valueColor: errorColor,
+          valueMaxLines: 1,
+        ),
+        const CalculatorSummaryRow(title: 'Tiempo estimado', value: '—'),
+      ],
     };
   }
 }

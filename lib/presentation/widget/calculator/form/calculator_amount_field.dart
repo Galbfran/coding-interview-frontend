@@ -23,7 +23,14 @@ class CalculatorAmountField extends StatelessWidget {
       enabled: enabled,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+      style: const TextStyle(
+        fontSize: 16,
+        height: 1.25,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textStrong,
+      ),
       decoration: InputDecoration(
+        isDense: true,
         contentPadding: CalculatorFormTokens.amountContentPadding,
         border: OutlineInputBorder(
           borderRadius: r,
