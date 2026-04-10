@@ -1,10 +1,10 @@
 import 'package:conversion_calculator/data/model/request/calculator_dto.dart';
 import 'package:conversion_calculator/presentation/cubits/calculator/calculator_cubit.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_error.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_initial.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_loaded.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_loading.dart';
-import 'package:conversion_calculator/presentation/widget/calculator_painter.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/state/calculator_error.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/state/calculator_initial.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/state/calculator_loaded.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/state/calculator_loading.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/calculator_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,9 +18,7 @@ class CalculatorBody extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        const Positioned.fill(
-          child: CalculatorScreenBackground(),
-        ),
+        const Positioned.fill(child: CalculatorScreenBackground()),
         Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

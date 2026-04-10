@@ -4,8 +4,8 @@ import 'package:conversion_calculator/data/datasources/recommendations_remote_da
 import 'package:conversion_calculator/data/model/request/calculator_dto.dart';
 import 'package:conversion_calculator/data/repositories/conversion_repository_impl.dart';
 import 'package:conversion_calculator/presentation/cubits/calculator/calculator_cubit.dart';
-import 'package:conversion_calculator/presentation/widget/app_bar.dart';
-import 'package:conversion_calculator/presentation/widget/calculator_body.dart';
+
+import 'package:conversion_calculator/presentation/widget/calculator/calculator_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,13 +32,6 @@ class CalculatorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: AppBarWidget(),
-      ),
-      body: CalculatorBody(),
-    );
+    return Scaffold(extendBodyBehindAppBar: true, body: const CalculatorBody());
   }
 }
