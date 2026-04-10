@@ -18,8 +18,9 @@ class RecommendationResponse {
       );
     }
 
+    // El API devuelve fiatToCryptoExchangeRate como String ("3.363"), no como num.
     return RecommendationResponse(
-      fiatToCryptoExchangeRate: (rate as num).toDouble(),
+      fiatToCryptoExchangeRate: double.parse(rate.toString()),
     );
   }
 }

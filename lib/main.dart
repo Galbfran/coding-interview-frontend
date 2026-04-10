@@ -1,16 +1,11 @@
-import 'package:conversion_calculator/core/router/router.dart';
-import 'package:conversion_calculator/core/theme/theme.dart';
-import 'package:conversion_calculator/core/utils/logger.dart';
+import 'package:conversion_calculator/core/router/app_router.dart';
+import 'package:conversion_calculator/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await dotenv.load(fileName: '.env');
-  } catch (_) {
-    appLogger.e('Error al cargar el archivo .env');
-  }
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
@@ -27,4 +22,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

@@ -9,23 +9,26 @@ sealed class CalculatorState extends Equatable {
 
 final class CalculatorInitial extends CalculatorState {
   const CalculatorInitial();
-  @override
-  List<Object> get props => [];
 }
 
 final class CalculatorLoading extends CalculatorState {
   const CalculatorLoading();
-  @override
-  List<Object> get props => [];
 }
 
 final class CalculatorLoaded extends CalculatorState {
-  const CalculatorLoaded({required this.jsonPreview});
+  const CalculatorLoaded({
+    required this.rate,
+    required this.convertedAmount,
+  });
 
-  final String jsonPreview;
+  /// Tasa fiatToCryptoExchangeRate devuelta por el API.
+  final double rate;
+
+  /// Monto convertido ya calculado (crypto*rate o fiat/rate).
+  final double convertedAmount;
 
   @override
-  List<Object> get props => [jsonPreview];
+  List<Object> get props => [rate, convertedAmount];
 }
 
 final class CalculatorError extends CalculatorState {
