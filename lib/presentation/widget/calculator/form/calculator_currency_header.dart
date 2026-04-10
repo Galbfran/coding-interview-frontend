@@ -13,12 +13,16 @@ class CalculatorCurrencyHeader extends StatelessWidget {
     required this.fiatNotifier,
     required this.tengoIsCryptoNotifier,
     required this.onSwap,
+    this.interactionsEnabled = true,
   });
 
   final ValueNotifier<CryptoCurrencyId> cryptoNotifier;
   final ValueNotifier<FiatCurrencyId> fiatNotifier;
   final ValueNotifier<bool> tengoIsCryptoNotifier;
   final VoidCallback onSwap;
+
+  /// Si es `false`, no se abren selectores ni el swap (p. ej. mientras carga el API).
+  final bool interactionsEnabled;
 
   Future<void> _pickFiat(BuildContext context) async {
     final code = await showCurrencySelectionSheet(
@@ -98,7 +102,7 @@ class CalculatorCurrencyHeader extends StatelessWidget {
                         : _fiatPill(context, alignEnd: false),
                   ),
                   IconButton(
-                    onPressed: onSwap,
+                    onPressed: interactionsEnabled ? onSwap : null,
                     icon: Icon(Icons.swap_horiz, color: AppColors.accent),
                     style: IconButton.styleFrom(
                       backgroundColor:
@@ -126,7 +130,7 @@ class CalculatorCurrencyHeader extends StatelessWidget {
       context: context,
       label: label,
       alignEnd: alignEnd,
-      onTap: () => _pickCrypto(context),
+      onTap: interactionsEnabled ? () => _pickCrypto(context) : null,
     );
   }
 
@@ -137,7 +141,7 @@ class CalculatorCurrencyHeader extends StatelessWidget {
       context: context,
       label: label,
       alignEnd: alignEnd,
-      onTap: () => _pickFiat(context),
+      onTap: interactionsEnabled ? () => _pickFiat(context) : null,
     );
   }
 
@@ -145,8 +149,11 @@ class CalculatorCurrencyHeader extends StatelessWidget {
     required BuildContext context,
     required String label,
     required bool alignEnd,
-    required VoidCallback onTap,
+    required VoidCallback? onTap,
   }) {
+    final arrowColor =
+        onTap != null ? AppColors.accent : AppColors.labelGrey;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -159,13 +166,13 @@ class CalculatorCurrencyHeader extends StatelessWidget {
             if (alignEnd) const Spacer(),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: onTap != null ? Colors.black87 : AppColors.labelGrey,
               ),
             ),
-            Icon(Icons.keyboard_arrow_down, color: AppColors.accent),
+            Icon(Icons.keyboard_arrow_down, color: arrowColor),
             if (!alignEnd) const Spacer(),
           ],
         ),

@@ -1,7 +1,6 @@
 import 'package:conversion_calculator/core/network/dio_client.dart';
 import 'package:conversion_calculator/core/utils/env.dart';
 import 'package:conversion_calculator/data/datasources/recommendations_remote_datasource.dart';
-import 'package:conversion_calculator/data/model/request/calculator_dto.dart';
 import 'package:conversion_calculator/data/repositories/conversion_repository_impl.dart';
 import 'package:conversion_calculator/presentation/cubits/calculator/calculator_cubit.dart';
 
@@ -21,7 +20,7 @@ class CalculatorPage extends StatelessWidget {
             client: DioClient(baseUrl: Env.baseUrl),
           ),
         ),
-      )..calculate(dto: CalculatorDto.mock()),
+      ),
       child: const CalculatorView(),
     );
   }

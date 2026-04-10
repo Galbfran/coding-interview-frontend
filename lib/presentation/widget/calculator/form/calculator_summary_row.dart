@@ -6,32 +6,54 @@ class CalculatorSummaryRow extends StatelessWidget {
     super.key,
     required this.title,
     required this.value,
+    this.valueColor,
+    this.valueFontStyle,
+    this.valueMaxLines = 3,
   });
 
   final String title;
   final String value;
+  final Color? valueColor;
+  final FontStyle? valueFontStyle;
+  final int valueMaxLines;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      visualDensity: VisualDensity.compact,
-      dense: true,
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 14,
-          color: AppColors.labelGrey,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-      trailing: Text(
-        value,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: AppColors.textStrong,
-        ),
+    final valueStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: valueColor ?? AppColors.textStrong,
+      fontStyle: valueFontStyle,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.labelGrey,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            flex: 3,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              maxLines: valueMaxLines,
+              overflow: TextOverflow.ellipsis,
+              style: valueStyle,
+            ),
+          ),
+        ],
       ),
     );
   }

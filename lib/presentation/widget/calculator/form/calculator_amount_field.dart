@@ -6,16 +6,19 @@ class CalculatorAmountField extends StatelessWidget {
   const CalculatorAmountField({
     super.key,
     required this.controller,
-    this.currencyPrefix = 'USDT',
+    required this.currencyPrefix,
+    this.enabled = true,
   });
 
   final TextEditingController controller;
   final String currencyPrefix;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      enabled: enabled,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
       decoration: InputDecoration(
