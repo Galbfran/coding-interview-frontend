@@ -1,5 +1,5 @@
+import 'package:conversion_calculator/presentation/widget/calculator/background/calculator_painter.dart';
 import 'package:conversion_calculator/presentation/widget/calculator/calculator_card.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_painter.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorBody extends StatelessWidget {

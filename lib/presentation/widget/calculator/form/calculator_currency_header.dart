@@ -1,6 +1,8 @@
+import 'package:conversion_calculator/core/theme/app_colors.dart';
 import 'package:conversion_calculator/data/model/enum/crypto_currency_id.dart';
 import 'package:conversion_calculator/data/model/enum/fiat_currency_id.dart';
-import 'package:conversion_calculator/core/theme/app_colors.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/currency_selection/currency_selection_catalog.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/currency_selection/currency_selection_sheet.dart';
 import 'package:flutter/material.dart';
 
 /// TENGO / QUIERO con [ValueNotifier]: solo esta zona se reconstruye al cambiar monedas o swap.
@@ -17,6 +19,30 @@ class CalculatorCurrencyHeader extends StatelessWidget {
   final ValueNotifier<FiatCurrencyId> fiatNotifier;
   final ValueNotifier<bool> tengoIsCryptoNotifier;
   final VoidCallback onSwap;
+
+  Future<void> _pickFiat(BuildContext context) async {
+    final code = await showCurrencySelectionSheet(
+      context: context,
+      sheetTitle: 'FIAT',
+      options: CurrencySelectionCatalog.fiatOptions(),
+      selectedCode: fiatNotifier.value.asApiId,
+    );
+    if (!context.mounted || code == null) return;
+    final id = CurrencySelectionCatalog.fiatFromCode(code);
+    if (id != null) fiatNotifier.value = id;
+  }
+
+  Future<void> _pickCrypto(BuildContext context) async {
+    final code = await showCurrencySelectionSheet(
+      context: context,
+      sheetTitle: 'Cripto',
+      options: CurrencySelectionCatalog.cryptoOptions(),
+      selectedCode: cryptoNotifier.value.asApiId,
+    );
+    if (!context.mounted || code == null) return;
+    final id = CurrencySelectionCatalog.cryptoFromCode(code);
+    if (id != null) cryptoNotifier.value = id;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +94,8 @@ class CalculatorCurrencyHeader extends StatelessWidget {
                 children: [
                   Expanded(
                     child: tengoCrypto
-                        ? _cryptoPill(cryptoNotifier)
-                        : _fiatPill(fiatNotifier, alignEnd: false),
+                        ? _cryptoPill(context)
+                        : _fiatPill(context, alignEnd: false),
                   ),
                   IconButton(
                     onPressed: onSwap,
@@ -81,8 +107,8 @@ class CalculatorCurrencyHeader extends StatelessWidget {
                   ),
                   Expanded(
                     child: tengoCrypto
-                        ? _fiatPill(fiatNotifier, alignEnd: true)
-                        : _cryptoPill(cryptoNotifier, alignEnd: true),
+                        ? _fiatPill(context, alignEnd: true)
+                        : _cryptoPill(context, alignEnd: true),
                   ),
                 ],
               ),
@@ -93,54 +119,56 @@ class CalculatorCurrencyHeader extends StatelessWidget {
     );
   }
 
-  Widget _cryptoPill(
-    ValueNotifier<CryptoCurrencyId> notifier, {
-    bool alignEnd = false,
-  }) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<CryptoCurrencyId>(
-        value: notifier.value,
-        isExpanded: true,
-        alignment: alignEnd ? Alignment.centerRight : Alignment.centerLeft,
-        icon: Icon(Icons.keyboard_arrow_down, color: AppColors.accent),
-        items: CryptoCurrencyId.values
-            .map(
-              (e) => DropdownMenuItem(
-                value: e,
-                child: Text(switch (e) {
-                  CryptoCurrencyId.tatumTronUsdt => 'USDT',
-                }),
-              ),
-            )
-            .toList(),
-        onChanged: (v) {
-          if (v != null) notifier.value = v;
-        },
-      ),
+  Widget _cryptoPill(BuildContext context, {bool alignEnd = false}) {
+    final label =
+        CurrencySelectionCatalog.displayTitleForCrypto(cryptoNotifier.value);
+    return _pill(
+      context: context,
+      label: label,
+      alignEnd: alignEnd,
+      onTap: () => _pickCrypto(context),
     );
   }
 
-  Widget _fiatPill(
-    ValueNotifier<FiatCurrencyId> notifier, {
-    bool alignEnd = false,
+  Widget _fiatPill(BuildContext context, {bool alignEnd = false}) {
+    final label =
+        CurrencySelectionCatalog.displayTitleForFiat(fiatNotifier.value);
+    return _pill(
+      context: context,
+      label: label,
+      alignEnd: alignEnd,
+      onTap: () => _pickFiat(context),
+    );
+  }
+
+  Widget _pill({
+    required BuildContext context,
+    required String label,
+    required bool alignEnd,
+    required VoidCallback onTap,
   }) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<FiatCurrencyId>(
-        value: notifier.value,
-        isExpanded: true,
-        alignment: alignEnd ? Alignment.centerRight : Alignment.centerLeft,
-        icon: Icon(Icons.keyboard_arrow_down, color: AppColors.accent),
-        items: FiatCurrencyId.values
-            .map(
-              (e) => DropdownMenuItem(
-                value: e,
-                child: Text(e.asApiId),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        child: Row(
+          mainAxisAlignment:
+              alignEnd ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            if (alignEnd) const Spacer(),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
               ),
-            )
-            .toList(),
-        onChanged: (v) {
-          if (v != null) notifier.value = v;
-        },
+            ),
+            Icon(Icons.keyboard_arrow_down, color: AppColors.accent),
+            if (!alignEnd) const Spacer(),
+          ],
+        ),
       ),
     );
   }

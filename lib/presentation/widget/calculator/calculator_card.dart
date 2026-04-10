@@ -4,10 +4,10 @@ import 'package:conversion_calculator/data/model/enum/crypto_currency_id.dart';
 import 'package:conversion_calculator/data/model/enum/fiat_currency_id.dart';
 import 'package:conversion_calculator/data/model/request/calculator_dto.dart';
 import 'package:conversion_calculator/presentation/cubits/calculator/calculator_cubit.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_amount_field.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_currency_header.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_exchange_button.dart';
-import 'package:conversion_calculator/presentation/widget/calculator/calculator_summary_row.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/form/calculator_amount_field.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/form/calculator_currency_header.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/form/calculator_exchange_button.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/form/calculator_summary_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
