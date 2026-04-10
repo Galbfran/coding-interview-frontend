@@ -1,4 +1,5 @@
 import 'package:conversion_calculator/core/theme/app_colors.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/form/calculator_form_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,27 +17,41 @@ class CalculatorAmountField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = BorderRadius.circular(CalculatorFormTokens.amountBorderRadius);
     return TextField(
       controller: controller,
       enabled: enabled,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+      style: const TextStyle(
+        fontSize: 16,
+        height: 1.25,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textStrong,
+      ),
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
+        isDense: true,
+        contentPadding: CalculatorFormTokens.amountContentPadding,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.accent),
+          borderRadius: r,
+          borderSide: const BorderSide(
+            color: AppColors.accent,
+            width: CalculatorFormTokens.amountBorderWidth,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.accent),
+          borderRadius: r,
+          borderSide: const BorderSide(
+            color: AppColors.accent,
+            width: CalculatorFormTokens.amountBorderWidth,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
+          borderRadius: r,
+          borderSide: const BorderSide(
+            color: AppColors.accent,
+            width: CalculatorFormTokens.amountBorderWidthFocused,
+          ),
         ),
         prefixText: '$currencyPrefix ',
         prefixStyle: const TextStyle(
