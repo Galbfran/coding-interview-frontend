@@ -3,6 +3,7 @@ import 'package:conversion_calculator/data/model/enum/crypto_currency_id.dart';
 import 'package:conversion_calculator/data/model/enum/fiat_currency_id.dart';
 import 'package:conversion_calculator/presentation/widget/calculator/currency_selection/currency_selection_catalog.dart';
 import 'package:conversion_calculator/presentation/widget/calculator/currency_selection/currency_selection_sheet.dart';
+import 'package:conversion_calculator/presentation/widget/calculator/form/calculator_form_tokens.dart';
 import 'package:flutter/material.dart';
 
 /// TENGO / QUIERO con [ValueNotifier]: solo esta zona se reconstruye al cambiar monedas o swap.
@@ -58,64 +59,66 @@ class CalculatorCurrencyHeader extends StatelessWidget {
       ]),
       builder: (context, _) {
         final tengoCrypto = tengoIsCryptoNotifier.value;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        final hInset = CalculatorFormTokens.selectorHorizontalInset;
+        return Stack(
+          clipBehavior: Clip.none,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'TENGO',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.labelGrey,
-                      fontWeight: FontWeight.w500,
-                    ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: CalculatorFormTokens.selectorLabelBorderOverlap,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    CalculatorFormTokens.selectorBorderRadius,
+                  ),
+                  border: Border.all(
+                    color: AppColors.accent,
+                    width: CalculatorFormTokens.selectorBorderWidth,
                   ),
                 ),
-                const SizedBox(width: 48),
-                Expanded(
-                  child: Text(
-                    'QUIERO',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.labelGrey,
-                      fontWeight: FontWeight.w500,
+                clipBehavior: Clip.none,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: tengoCrypto
+                                ? _cryptoPill(context, alignEnd: false)
+                                : _fiatPill(context, alignEnd: false),
+                          ),
+                          Expanded(
+                            child: tengoCrypto
+                                ? _fiatPill(context, alignEnd: true)
+                                : _cryptoPill(context, alignEnd: true),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    Transform.scale(
+                      scale: CalculatorFormTokens.swapButtonVisualScale,
+                      child: _SwapOverlapButton(
+                        enabled: interactionsEnabled,
+                        onSwap: onSwap,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-            const SizedBox(height: 6),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.accent, width: 1.2),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: tengoCrypto
-                        ? _cryptoPill(context)
-                        : _fiatPill(context, alignEnd: false),
-                  ),
-                  IconButton(
-                    onPressed: interactionsEnabled ? onSwap : null,
-                    icon: Icon(Icons.swap_horiz, color: AppColors.accent),
-                    style: IconButton.styleFrom(
-                      backgroundColor:
-                          AppColors.accent.withValues(alpha: 0.15),
-                    ),
-                  ),
-                  Expanded(
-                    child: tengoCrypto
-                        ? _fiatPill(context, alignEnd: true)
-                        : _cryptoPill(context, alignEnd: true),
-                  ),
-                ],
-              ),
+            Positioned(
+              top: CalculatorFormTokens.selectorLabelTop,
+              left: hInset,
+              child: const _SelectorEdgeLabel(text: 'TENGO'),
+            ),
+            Positioned(
+              top: CalculatorFormTokens.selectorLabelTop,
+              right: hInset,
+              child: const _SelectorEdgeLabel(text: 'QUIERO'),
             ),
           ],
         );
@@ -123,23 +126,31 @@ class CalculatorCurrencyHeader extends StatelessWidget {
     );
   }
 
-  Widget _cryptoPill(BuildContext context, {bool alignEnd = false}) {
-    final label =
-        CurrencySelectionCatalog.displayTitleForCrypto(cryptoNotifier.value);
+  Widget _cryptoPill(BuildContext context, {required bool alignEnd}) {
+    final label = CurrencySelectionCatalog.displayTitleForCrypto(
+      cryptoNotifier.value,
+    );
+    final asset = CurrencySelectionCatalog.assetPathForCrypto(
+      cryptoNotifier.value,
+    );
     return _pill(
       context: context,
       label: label,
+      assetPath: asset,
       alignEnd: alignEnd,
       onTap: interactionsEnabled ? () => _pickCrypto(context) : null,
     );
   }
 
-  Widget _fiatPill(BuildContext context, {bool alignEnd = false}) {
-    final label =
-        CurrencySelectionCatalog.displayTitleForFiat(fiatNotifier.value);
+  Widget _fiatPill(BuildContext context, {required bool alignEnd}) {
+    final label = CurrencySelectionCatalog.displayTitleForFiat(
+      fiatNotifier.value,
+    );
+    final asset = CurrencySelectionCatalog.assetPathForFiat(fiatNotifier.value);
     return _pill(
       context: context,
       label: label,
+      assetPath: asset,
       alignEnd: alignEnd,
       onTap: interactionsEnabled ? () => _pickFiat(context) : null,
     );
@@ -148,33 +159,127 @@ class CalculatorCurrencyHeader extends StatelessWidget {
   Widget _pill({
     required BuildContext context,
     required String label,
+    required String assetPath,
     required bool alignEnd,
     required VoidCallback? onTap,
   }) {
-    final arrowColor =
-        onTap != null ? AppColors.accent : AppColors.labelGrey;
+    final active = onTap != null;
+    final arrowColor = active ? AppColors.textStrong : AppColors.labelGrey;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Row(
-          mainAxisAlignment:
-              alignEnd ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            if (alignEnd) const Spacer(),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: onTap != null ? Colors.black87 : AppColors.labelGrey,
-              ),
+    final capsule = Radius.circular(CalculatorFormTokens.selectorBorderRadius);
+    final splashShape = alignEnd
+        ? BorderRadius.only(topRight: capsule, bottomRight: capsule)
+        : BorderRadius.only(topLeft: capsule, bottomLeft: capsule);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: splashShape,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: CalculatorFormTokens.selectorMinHeight,
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: alignEnd
+                  ? CalculatorFormTokens.selectorPillInnerGap
+                  : CalculatorFormTokens.selectorHorizontalInset,
+              right: alignEnd
+                  ? CalculatorFormTokens.selectorHorizontalInset
+                  : CalculatorFormTokens.selectorPillInnerGap,
+              top: CalculatorFormTokens.selectorPillPadding.top,
+              bottom: CalculatorFormTokens.selectorPillPadding.bottom,
             ),
-            Icon(Icons.keyboard_arrow_down, color: arrowColor),
-            if (!alignEnd) const Spacer(),
-          ],
+            child: Row(
+              mainAxisAlignment: alignEnd
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
+              children: [
+                if (alignEnd) const Spacer(),
+                Image.asset(
+                  assetPath,
+                  width: CalculatorFormTokens.selectorIconSize,
+                  height: CalculatorFormTokens.selectorIconSize,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.medium,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: CalculatorFormTokens.selectorLabelFontSize,
+                    fontWeight: FontWeight.w600,
+                    color: active ? AppColors.textStrong : AppColors.labelGrey,
+                  ),
+                ),
+                Icon(Icons.keyboard_arrow_down, color: arrowColor, size: 22),
+                if (!alignEnd) const Spacer(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Etiqueta sobre el borde del selector: fondo [surface] para interrumpir la línea naranja.
+class _SelectorEdgeLabel extends StatelessWidget {
+  const _SelectorEdgeLabel({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: AppColors.surface,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: CalculatorFormTokens.selectorEdgeLabelHorizontalPadding,
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppColors.textStrong,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SwapOverlapButton extends StatelessWidget {
+  const _SwapOverlapButton({required this.enabled, required this.onSwap});
+
+  final bool enabled;
+  final VoidCallback onSwap;
+
+  @override
+  Widget build(BuildContext context) {
+    final d = CalculatorFormTokens.swapButtonDiameter;
+    return Material(
+      color: AppColors.accent,
+      elevation: 2,
+      shadowColor: AppColors.shadow,
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: enabled ? onSwap : null,
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          width: d,
+          height: d,
+          child: Center(
+            child: Icon(
+              Icons.swap_horiz,
+              color: enabled
+                  ? AppColors.onAccent
+                  : AppColors.onAccent.withValues(alpha: 0.5),
+              size: 22,
+            ),
+          ),
         ),
       ),
     );

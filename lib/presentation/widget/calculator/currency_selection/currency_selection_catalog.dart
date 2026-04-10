@@ -62,4 +62,16 @@ abstract final class CurrencySelectionCatalog {
   static String displayTitleForCrypto(CryptoCurrencyId id) => switch (id) {
         CryptoCurrencyId.tatumTronUsdt => 'USDT',
       };
+
+  static String assetPathForFiat(FiatCurrencyId id) {
+    return fiatOptions()
+        .firstWhere((o) => o.code == id.asApiId)
+        .assetPath;
+  }
+
+  static String assetPathForCrypto(CryptoCurrencyId id) {
+    return cryptoOptions()
+        .firstWhere((o) => o.code == id.asApiId)
+        .assetPath;
+  }
 }
