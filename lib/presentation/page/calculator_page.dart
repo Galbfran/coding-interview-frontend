@@ -33,11 +33,12 @@ class CalculatorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBarWidget(),
       ),
-      body: const CalculatorBody(),
+      body: CalculatorBody(),
     );
   }
 }

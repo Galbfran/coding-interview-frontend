@@ -5,6 +5,12 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(title: const Text('Calculator'));
+    return AppBar(
+      title: const Text('Calculator'),
+      backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+    );
   }
 }
