@@ -1,12 +1,5 @@
+import 'package:conversion_calculator/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-
-abstract final class CalculatorBackgroundColors {
-  /// Cielo pastel (referencia pantalla final).
-  static const Color sky = Color(0xFFE8F6F7);
-
-  /// Naranja/ámbar del arco lateral (alineado al botón “Cambiar” del mockup).
-  static const Color accentOrange = Color(0xFFF5A623);
-}
 
 class CalculatorScreenBackgroundPainter extends CustomPainter {
   const CalculatorScreenBackgroundPainter();
@@ -26,7 +19,7 @@ class CalculatorScreenBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final skyPaint = Paint()
-      ..color = CalculatorBackgroundColors.sky
+      ..color = AppColors.sky
       ..isAntiAlias = true;
     canvas.drawRect(Offset.zero & size, skyPaint);
 
@@ -45,7 +38,7 @@ class CalculatorScreenBackgroundPainter extends CustomPainter {
       ..close();
 
     final orangePaint = Paint()
-      ..color = CalculatorBackgroundColors.accentOrange
+      ..color = AppColors.accent
       ..isAntiAlias = true
       ..style = PaintingStyle.fill;
 

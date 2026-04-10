@@ -32,6 +32,12 @@ class CalculatorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(extendBodyBehindAppBar: true, body: const CalculatorBody());
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: const CalculatorBody(),
+      ),
+    );
   }
 }

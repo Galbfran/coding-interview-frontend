@@ -25,11 +25,11 @@ class CalculatorDto {
         'amountCurrencyId': amountCurrencyId,
       };
 
-      factory CalculatorDto.mock() => CalculatorDto(
+  factory CalculatorDto.mock() => CalculatorDto(
         changeType: ChangeType.cryptoToFiat,
         cryptoCurrencyId: CryptoCurrencyId.tatumTronUsdt,
         fiatCurrencyId: FiatCurrencyId.pen,
         amount: 100,
-        amountCurrencyId: 100,
+        amountCurrencyId: 100.0,
       );
 }
